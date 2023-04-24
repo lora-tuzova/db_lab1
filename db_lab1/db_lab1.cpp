@@ -15,7 +15,7 @@ extern vector<CatalogNote> forEditingS;
 
 int main()
 {
-    cout << "Enter 1 to add fabric, 2 to add note, 3 to get fabric, 4 to get note, 5 to delete fabric, 6 to delete note,\n7 to print all fabrics, 8 to print all notes, 9 to edit fabric, 10 to edit note, 11 to count all fabrics, 12 to count all notes, 13 to count notes for a certain fabric\nEnter 0 to exit"<<endl;
+    cout << "Commands:\n1 to add fabric,\n2 to add note,\n3 to get fabric,\n4 to get note,\n5 to delete fabric,\n6 to delete note,\n7 to print all fabrics,\n8 to print all notes,\n9 to edit fabric,\n10 to edit note,\n11 to count all fabrics,\n12 to count all notes,\n13 to count notes for a certain fabric\nEnter 0 to exit"<<endl;
     int a;
     cin >> a;
     while (a != 0) {

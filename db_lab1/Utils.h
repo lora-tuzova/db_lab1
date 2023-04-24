@@ -177,12 +177,15 @@ void updM() {
 			}
 			else {
 				temp << line << endl;
+				dist = temp.tellp();
+				position = findInInd(num, ind);
+				ind[position] = to_string(num) + "  " + to_string(dist);
 			}
 		}
 		else {
 			position = findInInd(num, ind);
 			ind.erase(ind.begin() + position);
-			getline(myfile3, line);
+			//getline(myfile3, line);
 		}
 	}
 	temp.close();
