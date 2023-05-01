@@ -48,40 +48,60 @@ int checkOccurenceS(int n) {
 //funcs return 0 to delete, 1 to update and -1 to miss
 
 string GetFabric(int num) {
-	std::ifstream g("D:\\fabricInd.txt");
-	string line;
-	string number = to_string(num) + "  ";
-	while (1) {
-		getline(g, line);
-		if (line.find(number) != std::string::npos) {
+	int c = 0;
+	for (int i = 0;i < forDeletionM.size();i++) {
+		if (forDeletionM[i] == num) {
+			c = 1;
 			break;
 		}
 	}
-	g.close();
-	size_t found = line.find(" ");
-	string addr = "";
-	for (int i = found + 2;i < line.length();i++) {
-		addr += line[i];
+	if (c == 1) { return ""; }
+	else {
+		std::ifstream g("D:\\fabricInd.txt");
+		string line = "";
+		string number = to_string(num) + "  ";
+		while (1) {
+			getline(g, line);
+			if (line.find(number) != std::string::npos) {
+				break;
+			}
+		}
+		g.close();
+		size_t found = line.find(" ");
+		string addr = "";
+		for (int i = found + 2;i < line.length();i++) {
+			addr += line[i];
+		}
+		ifstream g2("D:\\fabric.txt");
+		g2.seekg(stoi(addr), ios_base::beg);
+		getline(g2, line);
+		g2.close();
+		return line;
 	}
-	ifstream g2("D:\\fabric.txt");
-	g2.seekg(stoi(addr), ios_base::beg);
-	getline(g2, line);
-	g2.close();
-	return line;
 }
 
 string GetNote(int num) {
-	std::ifstream g("D:\\catalog.txt");
-	string line;
-	string number = to_string(num) + "  ";
-	while (1) {
-		getline(g, line);
-		if (line.find(number) != std::string::npos) {
+	int c = 0;
+	for (int i = 0;i < forDeletionS.size();i++) {
+		if (forDeletionS[i] == num) {
+			c = 1;
 			break;
 		}
 	}
-	g.close();
-	return line;
+	if (c == 1) { return ""; }
+	else {
+		std::ifstream g("D:\\catalog.txt");
+		string line;
+		string number = to_string(num) + "  ";
+		while (1) {
+			getline(g, line);
+			if (line.find(number) != std::string::npos) {
+				break;
+			}
+		}
+		g.close();
+		return line;
+	}
 }
 
 string findInVectorM(int num) {
@@ -115,29 +135,49 @@ int findInInd(int num, vector<string>ind) {
 }
 
 int checkExistenceM(int num) {
-	string line;
-	std::ifstream g("D:\\fabricInd.txt");
-	string number = to_string(num) + "  ";
-	while (getline(g, line)) {
-		if (line.find(number) != std::string::npos) {
-			return 1;
+	int c = 0;
+	for (int i = 0;i < forDeletionM.size();i++) {
+		if (forDeletionM[i] == num) {
+			c = 1;
+			break;
 		}
 	}
-	g.close();
-	return 0;
+	if (c == 1) { return 0; }
+	else {
+		string line;
+		std::ifstream g("D:\\fabricInd.txt");
+		string number = to_string(num) + "  ";
+		while (getline(g, line)) {
+			if (line.find(number) != std::string::npos) {
+				return 1;
+			}
+		}
+		g.close();
+		return 0;
+	}
 }
 
 int checkExistenceS(int num) {
-	string line;
-	std::ifstream g("D:\\catalog.txt");
-	string number = to_string(num) + "  ";
-	while (getline(g, line)) {
-		if (line.find(number) != std::string::npos) {
-			return 1;
+	int c = 0;
+	for (int i = 0;i < forDeletionS.size();i++) {
+		if (forDeletionM[i] == num) {
+			c = 1;
+			break;
 		}
 	}
-	g.close();
-	return 0;
+	if (c == 1) { return 0; }
+	else {
+		string line;
+		std::ifstream g("D:\\catalog.txt");
+		string number = to_string(num) + "  ";
+		while (getline(g, line)) {
+			if (line.find(number) != std::string::npos) {
+				return 1;
+			}
+		}
+		g.close();
+		return 0;
+	}
 }
 
 void updM() {

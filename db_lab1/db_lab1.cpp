@@ -21,7 +21,7 @@ int main()
     while (a != 0) {
         switch (a) {
         case (1): {  //add fabric
-            cout << "num, name, color, mat, dens" << endl;
+            cout << "Enter the number, name, color, material and density of fabric:\n" <<"(color 1 corresponds to red, 2 - to green, 3 - to blue, 4 - to black, any other - to white)" << endl;
             int num, color;
             string name, s_color, mat;
             double dens;
@@ -39,11 +39,11 @@ int main()
             if (check == 0)
                 f.AddToFile();
             else
-                cout << "This fabric is already on the list";
+                cout << "This fabric is already on the list"<<endl;
             break;
         }
         case (2): {  //add note
-            cout << "num, fnum, am" << endl;
+            cout << "Enter number of note, number of corresponding fabric and an amount used (square meters):" << endl;
             int num, fnum;
             double amount;
             cin >> num >> fnum >> amount;
@@ -54,10 +54,10 @@ int main()
                 if (check == 0)
                     cn.AddToFile();
                 else
-                    cout << "This note is already on the list";
+                    cout << "This note is already on the list"<<endl;
             }
             else
-                cout << "This fabric is not on the list";
+                cout << "This fabric is not on the list"<<endl;
             break;
         }
         case (3): {  //find fabric
@@ -87,30 +87,37 @@ int main()
             string line;
             cout << "Enter the number" << endl;
             cin >> num;
-            forDeletionM.push_back(num);
-            std::ifstream g("D:\\catalog.txt");
-            string number = to_string(num) + "f";
-            while (getline(g, line)) {
-                if (line.find(number) != std::string::npos) {
-                    //push back note number for deletion
-                    size_t pos = line.find_first_of(' ');
-                    string part = line.substr(0, pos);
-                    int n = stoi(part);
-                    forDeletionS.push_back(n);
+            if (checkExistenceM) {
+                forDeletionM.push_back(num);
+                std::ifstream g("D:\\catalog.txt");
+                string number = to_string(num) + "f";
+                while (getline(g, line)) {
+                    if (line.find(number) != std::string::npos) {
+                        //push back note number for deletion
+                        size_t pos = line.find_first_of(' ');
+                        string part = line.substr(0, pos);
+                        int n = stoi(part);
+                        forDeletionS.push_back(n);
+                    }
                 }
+                g.close();
             }
-            g.close();
+            else cout << "This fabric is not on the list" << endl;
             break;
         }
         case (6): {  //delete note
             int num;
             cout << "Enter the number" << endl;
             cin >> num;
-            string line = GetNote(num);
-            size_t pos = line.find_first_of(' ');
-            string part = line.substr(0, pos);
-            int n = stoi(part);
-            forDeletionS.push_back(n);
+            if (checkExistenceS) {
+                string line = GetNote(num);
+                size_t pos = line.find_first_of(' ');
+                string part = line.substr(0, pos);
+                int n = stoi(part);
+                forDeletionS.push_back(n);
+            }
+            else
+                cout<< "This note is not on the list" << endl;
             break;
         }
         case (7): {  //print all fabrics
@@ -133,25 +140,26 @@ int main()
             int num;
             cout << "Enter the number" << endl;
             cin >> num;
-            cout << "name, color, mat, dens" << endl;
-            int color;
-            string name, s_color, mat;
-            double dens;
-            cin >> name >> color >> mat >> dens;
-            switch (color) {
-            case 1: {s_color = "red"; break;}
-            case 2: {s_color = "green"; break;}
-            case 3: {s_color = "blue"; break;}
-            case 4: {s_color = "black"; break;}
-            default: {s_color = "white";}
-
-            }
-            Fabric f = Fabric(num, name, s_color, mat, dens);
             int check = checkExistenceM(num);
-            if (check == 1)
-                forEditingM.push_back(f);
+			if (check == 1) {
+				cout << "Enter the name, color, material and density of this fabric:\n" << "(color 1 corresponds to red, 2 - to green, 3 - to blue, 4 - to black, any other - to white)" << endl;
+				int color;
+				string name, s_color, mat;
+				double dens;
+				cin >> name >> color >> mat >> dens;
+				switch (color) {
+				case 1: {s_color = "red"; break;}
+				case 2: {s_color = "green"; break;}
+				case 3: {s_color = "blue"; break;}
+				case 4: {s_color = "black"; break;}
+				default: {s_color = "white";}
+
+				}
+				Fabric f = Fabric(num, name, s_color, mat, dens);
+				forEditingM.push_back(f);
+			}
             else
-                cout << "This fabric is not on the list";
+                cout << "This fabric is not on the list"<<endl;
             break;
         }
         case (10): {  //edit note
@@ -166,7 +174,7 @@ int main()
             if (check == 1)
                 forEditingS.push_back(cn);
             else
-                cout << "This note is not on the list";
+                cout << "This note is not on the list"<<endl;
             break;
         }
         case (11): {  //count fabrics
@@ -176,7 +184,7 @@ int main()
             myfile.open("D:\\fabric.txt");
             while (getline(myfile, line))
                 count++;
-            cout << count;
+            cout << count << " fabrics total" << endl;
             break;
         }
         case (12): {  //count notes
@@ -186,10 +194,11 @@ int main()
             myfile.open("D:\\catalog.txt");
             while (getline(myfile, line))
                 count++;
+            cout << count << " notes total" << endl;
             break;
         }
         case (13): {  //count notes for certain fabric
-            int num;
+            int num,count=0;
             cout << "Enter number of fabric" << endl;
             cin >> num;
             int check = checkExistenceM(num);
@@ -200,16 +209,18 @@ int main()
                 while (getline(g, line)) {
                     if (line.find(number) != std::string::npos) {
                         cout << line << endl;
+                        count++;
                     }
                 }
                 g.close();
+                cout << count << endl;
             }
             else
-                cout << "This fabric is not on the list";
+                cout << "This fabric is not on the list"<<endl;
         }
         default: break;
         }
-        cout << "Enter 1 to add fabric, 2 to add note, 3 to get fabric, 4 to get note, 5 to delete fabric, 6 to delete note,\n7 to print all fabrics, 8 to print all notes, 9 to edit fabric, 10 to edit note, 11 to count all fabrics, 12 to count all notes, 13 to count notes for a certain fabric\nEnter 0 to exit" << endl;
+        cout << "Commands:\n1 to add fabric,\n2 to add note,\n3 to get fabric,\n4 to get note,\n5 to delete fabric,\n6 to delete note,\n7 to print all fabrics,\n8 to print all notes,\n9 to edit fabric,\n10 to edit note,\n11 to count all fabrics,\n12 to count all notes,\n13 to count notes for a certain fabric\nEnter 0 to exit" << endl;
         cin >> a;
     }
     checkDoubles();
